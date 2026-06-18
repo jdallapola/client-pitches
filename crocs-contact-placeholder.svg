@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" role="img" aria-label="Contato Crocs a definir">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#8ecf2f"/>
+      <stop offset="1" stop-color="#4a7f13"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="400" rx="200" fill="url(#bg)"/>
+  <circle cx="200" cy="162" r="58" fill="#f7f7f4" opacity=".94"/>
+  <path d="M96 326c13-64 53-102 104-102s91 38 104 102" fill="#f7f7f4" opacity=".94"/>
+  <text x="200" y="376" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" font-weight="700" letter-spacing="6" fill="#f7f7f4">CROCS</text>
+</svg>

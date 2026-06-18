@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Novos Clientes - Equipe Qualitativa | Kantar Insights V2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700;9..40,800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#07111a;
+    --bg-2:#0b1722;
+    --paper:#f4f2ee;
+    --ink:#f7f7f4;
+    --muted:#aeb8c5;
+    --ghost:rgba(174,184,197,.32);
+    --line:rgba(214,222,232,.24);
+    --blue:#5865ff;
+    --blue-soft:#8790ff;
+    --green:#17a365;
+    --jovi:#4d7cff;
+    --crocs:#8ecf2f;
+    --radius:8px;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;}
+  body{
+    font-family:"DM Sans",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    background:#03080d;
+    color:var(--ink);
+    overflow:hidden;
+  }
+
+  .deck{
+    position:relative;
+    width:100vw;
+    height:100vh;
+    background:#03080d;
+  }
+
+  .slide{
+    position:absolute;
+    inset:0;
+    display:grid;
+    grid-template-rows:auto 1fr;
+    gap:clamp(28px,4vh,48px);
+    padding:
+      clamp(42px,6vh,76px)
+      clamp(54px,7vw,104px)
+      clamp(86px,10vh,126px);
+    background:
+      radial-gradient(circle at 80% 20%, rgba(88,101,255,.13), transparent 34%),
+      linear-gradient(135deg,var(--bg),var(--bg-2));
+    opacity:0;
+    visibility:hidden;
+    transform:translateY(12px);
+    transition:opacity .36s ease,transform .36s ease,visibility .36s;
+    overflow:hidden;
+  }
+
+  .slide.active{
+    opacity:1;
+    visibility:visible;
+    transform:translateY(0);
+  }
+
+  .slide::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    opacity:.18;
+    background-image:
+      linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+    background-size:64px 64px;
+    mask-image:linear-gradient(180deg, transparent, #000 22%, #000 80%, transparent);
+  }
+
+  .slide.light{
+    background:var(--paper);
+    color:#111821;
+  }
+
+  .slide.light::after{opacity:.35;background-image:linear-gradient(rgba(20,28,38,.045) 1px, transparent 1px),linear-gradient(90deg, rgba(20,28,38,.035) 1px, transparent 1px);}
+
+  .topbar{
+    position:relative;
+    z-index:1;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:24px;
+    color:var(--muted);
+    font-size:clamp(11px,.8vw,14px);
+    letter-spacing:.22em;
+    text-transform:uppercase;
+  }
+
+  .topbar .section{
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+
+  .mark{
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    background:var(--blue);
+    box-shadow:0 0 0 6px rgba(88,101,255,.16);
+  }
+
+  .slide.light .topbar{color:#66717f;}
+
+  .stage{
+    position:relative;
+    z-index:1;
+    display:grid;
+    grid-template-columns:minmax(0,.92fr) minmax(420px,.98fr);
+    gap:clamp(54px,7vw,104px);
+    align-items:center;
+    min-height:0;
+  }
+
+  .stage.wide-left{grid-template-columns:minmax(0,1.08fr) minmax(380px,.82fr);}
+
+  .kicker{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-height:54px;
+    padding:0 36px;
+    border-radius:999px;
+    background:#f7f7f4;
+    color:var(--blue);
+    font-weight:800;
+    font-size:clamp(18px,1.6vw,26px);
+    letter-spacing:-.02em;
+    margin-bottom:clamp(42px,6vh,66px);
+  }
+
+  .slide.light .kicker{
+    background:#111821;
+    color:#fff;
+  }
+
+  .quote{
+    position:relative;
+    color:var(--muted);
+    font-size:clamp(34px,3.7vw,66px);
+    line-height:1.16;
+    letter-spacing:0;
+    font-weight:400;
+    max-width:860px;
+    padding-left:clamp(34px,3.2vw,54px);
+  }
+
+  .quote::before{
+    content:"";
+    position:absolute;
+    left:0;
+    top:.22em;
+    width:6px;
+    height:1.15em;
+    background:var(--client-color,var(--blue));
+  }
+
+  .quote strong{
+    color:var(--ink);
+    font-weight:700;
+  }
+
+  .slide.light .quote{color:#4c5865;}
+  .slide.light .quote strong{color:#111821;}
+
+  .support{
+    margin-top:22px;
+    max-width:680px;
+    color:rgba(247,247,244,.72);
+    font-size:clamp(15px,1.12vw,19px);
+    line-height:1.52;
+  }
+
+  .slide.light .support{color:#4f5965;}
+
+  .principle-panel{
+    align-self:center;
+    display:flex;
+    flex-direction:column;
+    gap:0;
+  }
+
+  .panel-title{
+    align-self:flex-start;
+    min-height:54px;
+    display:inline-flex;
+    align-items:center;
+    padding:0 34px;
+    border-radius:999px;
+    background:#f7f7f4;
+    color:var(--blue);
+    font-weight:800;
+    font-size:clamp(18px,1.42vw,24px);
+    margin-bottom:36px;
+  }
+
+  .slide.light .panel-title{
+    background:#111821;
+    color:#fff;
+  }
+
+  .principle{
+    display:grid;
+    grid-template-columns:42px 1fr;
+    gap:22px;
+    padding:26px 0;
+    border-bottom:1px solid var(--line);
+    opacity:.32;
+    color:var(--ink);
+  }
+
+  .slide.light .principle{border-bottom:1px solid rgba(17,24,33,.16);color:#111821;}
+  .principle:last-child{border-bottom:0;}
+
+  .principle.current{
+    opacity:1;
+  }
+
+  .spark{
+    width:34px;
+    height:34px;
+    position:relative;
+    margin-top:4px;
+  }
+
+  .spark::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    margin:auto;
+    background:currentColor;
+    height:34px;
+    width:34px;
+    clip-path:polygon(50% 0,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0 50%,39% 39%);
+  }
+
+  .current .spark{color:var(--client-color,var(--blue));}
+
+  .principle .label{
+    display:block;
+    color:var(--client-color,var(--blue));
+    font-weight:800;
+    font-size:clamp(11px,.85vw,15px);
+    letter-spacing:.2em;
+    text-transform:uppercase;
+    margin-bottom:8px;
+  }
+
+  .principle .title{
+    display:block;
+    color:currentColor;
+    font-size:clamp(28px,2.5vw,46px);
+    line-height:1.05;
+    letter-spacing:-.01em;
+    font-weight:500;
+  }
+
+  .principle .meta{
+    display:block;
+    margin-top:12px;
+    color:var(--muted);
+    font-size:clamp(13px,1vw,16px);
+    line-height:1.45;
+  }
+
+  .slide.light .principle .meta{color:#5b6672;}
+
+  .cover{
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-end;
+    gap:0;
+    background:#03080d;
+    color:#fff;
+  }
+
+  .cover::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+      linear-gradient(90deg, rgba(3,8,13,.92) 0%, rgba(3,8,13,.52) 48%, rgba(3,8,13,.06) 100%),
+      linear-gradient(0deg, rgba(3,8,13,.62), transparent 48%),
+      url("background.png") center/cover no-repeat;
+    transform:scale(1.01);
+  }
+
+  .cover::after{
+    background-image:none;
+    opacity:1;
+    background:linear-gradient(180deg, rgba(255,255,255,.04), transparent 28%);
+  }
+
+  .cover .topbar{
+    position:absolute;
+    top:clamp(42px,6vh,76px);
+    left:clamp(54px,7vw,104px);
+    right:clamp(54px,7vw,104px);
+    color:rgba(255,255,255,.76);
+  }
+
+  .cover-copy{
+    position:relative;
+    z-index:1;
+    max-width:min(1100px,76vw);
+    padding-bottom:clamp(44px,5vh,68px);
+  }
+
+  h1{
+    font-size:clamp(72px,8.8vw,150px);
+    line-height:.88;
+    letter-spacing:-.055em;
+    font-weight:800;
+    text-transform:uppercase;
+  }
+
+  .cover-sub{
+    margin-top:28px;
+    color:rgba(255,255,255,.68);
+    font-size:clamp(24px,2.2vw,38px);
+    line-height:1.25;
+    max-width:920px;
+  }
+
+  .cover-footer{
+    position:relative;
+    z-index:1;
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    gap:28px;
+    padding-top:24px;
+    border-top:1px solid rgba(255,255,255,.24);
+    color:rgba(255,255,255,.72);
+  }
+
+  .cover-footer strong{
+    display:block;
+    color:#fff;
+    font-size:clamp(18px,1.4vw,24px);
+    margin-bottom:6px;
+  }
+
+  .agenda{
+    display:grid;
+    gap:18px;
+  }
+
+  .agenda-row{
+    display:grid;
+    grid-template-columns:58px 1fr;
+    gap:22px;
+    align-items:start;
+    padding:20px 0;
+    border-bottom:1px solid var(--line);
+  }
+
+  .agenda-row:last-child{border-bottom:0;}
+
+  .agenda-number{
+    color:var(--blue-soft);
+    font-weight:800;
+    font-size:clamp(18px,1.4vw,24px);
+  }
+
+  .agenda-title{
+    color:var(--ink);
+    font-size:clamp(23px,2vw,36px);
+    line-height:1.18;
+    font-weight:700;
+  }
+
+  .agenda-text{
+    margin-top:8px;
+    color:var(--muted);
+    font-size:clamp(14px,1vw,17px);
+    line-height:1.55;
+  }
+
+  .client-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:18px;
+    align-self:stretch;
+  }
+
+  .client-card{
+    display:flex;
+    flex-direction:column;
+    min-height:0;
+    padding:16px 20px;
+    border:1px solid rgba(17,24,33,.14);
+    border-radius:var(--radius);
+    background:rgba(255,255,255,.62);
+  }
+
+  .client-top{
+    display:grid;
+    grid-template-columns:64px minmax(0,1fr) auto;
+    gap:16px;
+    align-items:center;
+  }
+
+  .headshot{
+    width:64px;
+    height:64px;
+    border-radius:50%;
+    overflow:hidden;
+    background:#e6e9ed;
+    border:2px solid rgba(17,24,33,.12);
+    box-shadow:0 10px 22px rgba(17,24,33,.08);
+  }
+
+  .headshot img{
+    display:block;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+  }
+
+  .brand-logo{
+    display:block;
+    justify-self:end;
+    max-width:104px;
+    max-height:38px;
+    object-fit:contain;
+  }
+
+  .brand-logo.heineken-logo{width:104px;max-height:28px;}
+  .brand-logo.jovi-logo{width:38px;height:38px;}
+  .brand-logo.crocs-logo{width:98px;max-height:24px;}
+
+  .client-card .brand{
+    display:inline-flex;
+    align-self:flex-start;
+    align-items:center;
+    min-height:30px;
+    padding:0 13px;
+    border-radius:999px;
+    background:#111821;
+    color:#fff;
+    font-size:13px;
+    font-weight:800;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+  }
+
+  .brand.heineken{background:var(--green);}
+  .brand.jovi{background:var(--jovi);}
+  .brand.crocs{background:var(--crocs);color:#10151c;}
+
+  .client-card h3{
+    margin-top:12px;
+    font-size:clamp(20px,1.38vw,27px);
+    line-height:1.05;
+    letter-spacing:-.02em;
+  }
+
+  .client-card p{
+    margin-top:8px;
+    color:#596574;
+    font-size:clamp(13px,.94vw,16px);
+    line-height:1.42;
+  }
+
+  .contact-line{
+    margin-top:auto;
+    padding-top:10px;
+    display:grid;
+    gap:7px;
+    color:#111821;
+  }
+
+  .contact-line span:first-child{
+    font-weight:800;
+    font-size:clamp(15px,1.05vw,18px);
+  }
+
+  .contact-line span:last-child{
+    color:#6a7481;
+    font-size:clamp(12px,.86vw,14px);
+    line-height:1.35;
+  }
+
+  .solution-strip{
+    display:flex;
+    gap:12px;
+    margin-top:26px;
+  }
+
+  .solution{
+    flex:1 1 0;
+    border:1px solid rgba(255,255,255,.16);
+    border-radius:var(--radius);
+    padding:12px 14px;
+    background:rgba(255,255,255,.045);
+  }
+
+  .solution b{
+    display:block;
+    color:#fff;
+    font-size:clamp(13px,.92vw,16px);
+    line-height:1.25;
+  }
+
+  .solution span{
+    display:block;
+    margin-top:6px;
+    color:var(--muted);
+    font-size:clamp(11px,.82vw,13px);
+    line-height:1.35;
+  }
+
+  .activation{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:14px;
+    align-self:stretch;
+  }
+
+  .activation-card{
+    display:flex;
+    flex-direction:column;
+    padding:20px;
+    border-radius:var(--radius);
+    background:rgba(255,255,255,.66);
+    border:1px solid rgba(17,24,33,.13);
+  }
+
+  .activation-card h3{
+    font-size:clamp(20px,1.45vw,28px);
+    line-height:1.08;
+    letter-spacing:-.02em;
+  }
+
+  .activation-card .channel{
+    margin:12px 0 14px;
+    font-size:12px;
+    font-weight:800;
+    letter-spacing:.2em;
+    text-transform:uppercase;
+  }
+
+  .activation-card p{
+    color:#535f6d;
+    font-size:clamp(13px,.95vw,15px);
+    line-height:1.48;
+  }
+
+  .activation-card .next{
+    margin-top:auto;
+    padding-top:14px;
+    color:#111821;
+    font-weight:800;
+    font-size:clamp(14px,.95vw,16px);
+    line-height:1.4;
+  }
+
+  .nav{
+    position:fixed;
+    left:clamp(28px,4vw,64px);
+    right:clamp(28px,4vw,64px);
+    bottom:clamp(22px,3.2vh,36px);
+    z-index:20;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    pointer-events:none;
+  }
+
+  .dots{
+    display:flex;
+    gap:10px;
+    pointer-events:auto;
+  }
+
+  .dot{
+    width:9px;
+    height:9px;
+    border:0;
+    border-radius:999px;
+    background:rgba(247,247,244,.32);
+    cursor:pointer;
+    transition:width .24s ease, background .24s ease;
+  }
+
+  .dot.on{
+    width:32px;
+    background:var(--blue);
+  }
+
+  .pager{
+    pointer-events:auto;
+    color:rgba(247,247,244,.62);
+    font-size:12px;
+    letter-spacing:.22em;
+    font-weight:800;
+  }
+
+  body.light-nav .pager{color:rgba(17,24,33,.72);}
+  body.light-nav .dot{background:rgba(17,24,33,.26);}
+  body.light-nav .dot.on{background:var(--blue);}
+  body.light-nav .arrows button{
+    border-color:rgba(17,24,33,.22);
+    background:rgba(17,24,33,.04);
+    color:#111821;
+  }
+
+  .arrows{
+    display:flex;
+    gap:10px;
+    pointer-events:auto;
+  }
+
+  .arrows button{
+    width:42px;
+    height:42px;
+    border:1px solid rgba(247,247,244,.28);
+    border-radius:999px;
+    background:rgba(247,247,244,.06);
+    color:#fff;
+    font-size:22px;
+    line-height:1;
+    cursor:pointer;
+    transition:background .2s ease,border-color .2s ease,transform .2s ease;
+  }
+
+  .arrows button:hover{
+    background:var(--blue);
+    border-color:var(--blue);
+    transform:translateY(-1px);
+  }
+
+  .progress{
+    position:fixed;
+    top:0;
+    left:0;
+    z-index:30;
+    height:3px;
+    width:0;
+    background:linear-gradient(90deg,var(--blue),#9ea6ff);
+    transition:width .32s ease;
+  }
+
+  @media (max-width:1000px){
+    body{overflow:auto;}
+    .deck{height:auto;min-height:100vh;}
+    .slide{
+      position:relative;
+      min-height:100vh;
+      display:none;
+      padding:34px 24px 92px;
+      overflow:visible;
+    }
+    .slide.active{display:grid;}
+    .stage,
+    .stage.wide-left{
+      grid-template-columns:1fr;
+      gap:38px;
+      align-items:start;
+    }
+    .quote{
+      font-size:clamp(34px,10vw,56px);
+      padding-left:26px;
+    }
+    .client-grid,
+    .activation,
+    .solution-strip{
+      grid-template-columns:1fr;
+    }
+    .cover .topbar{
+      left:24px;
+      right:24px;
+      top:34px;
+    }
+    .cover-copy{max-width:100%;padding-top:18vh;}
+    h1{font-size:clamp(56px,16vw,92px);}
+    .cover-footer{flex-direction:column;align-items:flex-start;}
+    .principle{grid-template-columns:32px 1fr;gap:16px;padding:20px 0;}
+    .spark{width:26px;height:26px;}
+    .spark::before{height:26px;width:26px;}
+    .principle .title{font-size:clamp(24px,7vw,34px);}
+    .topbar{align-items:flex-start;flex-direction:column;gap:10px;}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    .slide,.dot,.arrows button,.progress{transition:none;}
+  }
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<main class="deck" id="deck">
+
+  <section class="slide cover active">
+    <div class="topbar">
+      <span class="section"><span class="mark"></span>Kantar Insights - Brasil</span>
+      <span>Equipe Qualitativa - Junho 2026</span>
+    </div>
+    <div class="cover-copy">
+      <h1>Potenciais<br>Novos Clientes</h1>
+      <p class="cover-sub">Três possíveis aberturas para discutirmos: quem vale priorizar, qual é o gancho e como puxar o assunto.</p>
+    </div>
+    <div class="cover-footer">
+      <div>
+        <strong>Objetivo</strong>
+        Trazer algumas apostas iniciais e calibrar junto o que faz mais sentido.
+      </div>
+      <div>
+        <strong>Recorte</strong>
+        Heineken, JOVI e Crocs Brasil.
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="topbar">
+      <span class="section"><span class="mark"></span>Ponto de partida</span>
+      <span>02 / 07</span>
+    </div>
+    <div class="stage">
+      <div>
+        <span class="kicker">Como eu pensei esse mapa</span>
+        <p class="quote">Separei três contatos que parecem bons pontos de partida, cada um com <strong>um gancho diferente para Quali</strong>.</p>
+      </div>
+      <div class="agenda">
+        <div class="agenda-row">
+          <span class="agenda-number">01</span>
+          <div>
+            <h2 class="agenda-title">Existe algum caminho de entrada</h2>
+            <p class="agenda-text">Em todos os casos há uma relação direta ou um possível intermediário para começar a conversa.</p>
+          </div>
+        </div>
+        <div class="agenda-row">
+          <span class="agenda-number">02</span>
+          <div>
+            <h2 class="agenda-title">Tem algo acontecendo na marca</h2>
+            <p class="agenda-text">A ideia é entrar pelo momento de cada conta, não por uma oferta genérica de pesquisa.</p>
+          </div>
+        </div>
+        <div class="agenda-row">
+          <span class="agenda-number">03</span>
+          <div>
+            <h2 class="agenda-title">Primeiro passo sem forçar venda</h2>
+            <p class="agenda-text">O primeiro toque seria mais para ouvir o momento, entender prioridades e só depois ver se cabe avançar.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide light">
+    <div class="topbar">
+      <span class="section"><span class="mark"></span>Contatos mapeados</span>
+      <span>03 / 07</span>
+    </div>
+    <div class="stage wide-left">
+      <div>
+        <span class="kicker">Três apostas iniciais</span>
+        <p class="quote">Eu começaria por esses nomes porque parecem ter <strong>abertura, assunto e um próximo passo possível</strong>.</p>
+        <p class="support">A ideia é usar este deck mais como conversa de priorização do que como uma recomendação fechada.</p>
+      </div>
+      <div class="client-grid">
+        <article class="client-card">
+          <div class="client-top">
+            <div class="headshot"><img src="guga-carnicel.jpg" alt="Gustavo Carnicel"></div>
+            <div>
+              <span class="brand heineken">Heineken</span>
+              <h3>Gustavo "Guga" Carnicel</h3>
+            </div>
+            <img class="brand-logo heineken-logo" src="heineken-logo.svg" alt="Heineken">
+          </div>
+          <p>Consumer & Market Insights Manager. Ex-NielsenIQ, com relação prévia consolidada em pesquisa.</p>
+          <div class="contact-line">
+            <span>Contato direto</span>
+            <span>Gancho possível: baixo teor, ocasião de consumo e inovação premium.</span>
+          </div>
+        </article>
+        <article class="client-card">
+          <div class="client-top">
+            <div class="headshot"><img src="marcel-pesah.jpg" alt="Marcel Pesah"></div>
+            <div>
+              <span class="brand jovi">JOVI</span>
+              <h3>Marcel Pesah</h3>
+            </div>
+            <img class="brand-logo jovi-logo" src="jovi-logo.png" alt="JOVI">
+          </div>
+          <p>Public Relations & Brand Experience Director. Marca em construção de presença e reputação no Brasil.</p>
+          <div class="contact-line">
+            <span>Contato direto</span>
+            <span>Gancho possível: construção de marca e diferenciação em uma categoria cheia.</span>
+          </div>
+        </article>
+        <article class="client-card">
+          <div class="client-top">
+            <div class="headshot"><img src="crocs-contact-placeholder.svg" alt="Contato Crocs a definir"></div>
+            <div>
+              <span class="brand crocs">Crocs</span>
+              <h3>Time de branding Brasil</h3>
+            </div>
+            <img class="brand-logo crocs-logo" src="crocs-logo.png" alt="Crocs">
+          </div>
+          <p>Contato a definir. Entrada indireta via relacionamento com franquia em Londrina, PR.</p>
+          <div class="contact-line">
+            <span>Porta intermediada</span>
+            <span>Gancho possível: expansão, cultura jovem e experiência de varejo.</span>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" style="--client-color:var(--green)">
+    <div class="topbar">
+      <span class="section"><span class="mark"></span>Onde pode ter conversa</span>
+      <span>04 / 07</span>
+    </div>
+    <div class="stage">
+      <div>
+        <p class="quote">Na Heineken, o gancho pode ser entender melhor o que <strong>baixo teor</strong> quer dizer para a marca e para as ocasiões de consumo.</p>
+        <p class="support">Com Heineken Ultimate, talvez exista uma boa conversa sobre como esse lançamento está sendo lido pelo consumidor: premiumização, moderação, ocasião ou alguma mistura disso tudo.</p>
+        <div class="solution-strip">
+          <div class="solution">
+            <b>NeedScope</b>
+            <span>Ver se moderação aparece como premium, renúncia ou novo ritual.</span>
+          </div>
+          <div class="solution">
+            <b>Exploratória Qualitativa</b>
+            <span>Entender ocasiões, perfis, barreiras e códigos culturais do baixo teor.</span>
+          </div>
+          <div class="solution">
+            <b>LINK+</b>
+            <span>Se houver campanha, olhar ressonância e clareza da mensagem.</span>
+          </div>
+        </div>
+      </div>
+      <aside class="principle-panel">
+        <h2 class="panel-title">Apostas para discutir</h2>
+        <div class="principle current">
+          <span class="spark"></span>
+          <div>
+            <span class="label">Heineken - Guga</span>
+            <span class="title">Baixo teor, ocasião e marca</span>
+            <span class="meta">Eu puxaria pelo lançamento e tentaria entender como eles estão pensando esse território.</span>
+          </div>
+        </div>
+        <div class="principle">
+          <span class="spark"></span>
+          <div>
+            <span class="label">JOVI - Marcel</span>
+            <span class="title">Marca nova tentando ganhar espaço</span>
+          </div>
+        </div>
+        <div class="principle">
+          <span class="spark"></span>
+          <div>
+            <span class="label">Crocs - contato a mapear</span>
+            <span class="title">Expansão, varejo e cultura</span>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="slide" style="--client-color:var(--jovi)">
+    <div class="topbar">
+      <span class="section"><span class="mark"></span>Onde pode ter conversa</span>
+      <span>05 / 07</span>
+    </div>
+    <div class="stage">
+      <div>
+        <p class="quote">Na JOVI, eu puxaria a conversa pelo desafio de construir marca no Brasil, antes de tentar <strong>vender uma solução</strong>.</p>
+        <p class="support">É uma marca entrando em uma categoria muito disputada. Pode fazer sentido ouvir como eles estão pensando confiança, diferenciação, reputação e estética local.</p>
+        <div class="solution-strip">
+          <div class="solution">
+            <b>NeedScope</b>
+            <span>Se houver abertura, mapear territórios emocionais e posicionamento.</span>
+          </div>
+          <div class="solution">
+            <b>Cultural Insights</b>
+            <span>Entender como a categoria é percebida no dia a dia das pessoas.</span>
+          </div>
+          <div class="solution">
+            <b>MDS + Converser</b>
+            <span>Talvez testar aprendizados rápidos ao longo do lançamento.</span>
+          </div>
+        </div>
+      </div>
+      <aside class="principle-panel">
+        <h2 class="panel-title">Apostas para discutir</h2>
+        <div class="principle">
+          <span class="spark"></span>
+          <div>
+            <span class="label">Heineken - Guga</span>
+            <span class="title">Baixo teor, ocasião e marca</span>
+          </div>
+        </div>
+        <div class="principle current">
+          <span class="spark"></span>
+          <div>
+            <span class="label">JOVI - Marcel</span>
+            <span class="title">Marca nova tentando ganhar espaço</span>
+            <span class="meta">Eu retomaria o contato sem pauta fechada, mais como troca sobre o momento da marca.</span>
+          </div>
+        </div>
+        <div class="principle">
+          <span class="spark"></span>
+          <div>
+            <span class="label">Crocs - contato a mapear</span>
+            <span class="title">Expansão, varejo e cultura</span>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="slide" style="--client-color:var(--crocs)">
+    <div class="topbar">
+      <span class="section"><span class="mark"></span>Onde pode ter conversa</span>
+      <span>06 / 07</span>
+    </div>
+    <div class="stage">
+      <div>
+        <p class="quote">Crocs é menos direto, mas pode valer mapear quem cuida de marca por causa do <strong>momento de expansão</strong>.</p>
+        <p class="support">Aqui eu não chegaria com uma tese tão pronta. O caminho seria primeiro entender quem decide marca e se existe espaço para conversar sobre varejo, collabs e cultura jovem.</p>
+        <div class="solution-strip">
+          <div class="solution">
+            <b>Mapeamento de decisor</b>
+            <span>Usar a ponte em Londrina para descobrir a pessoa certa.</span>
+          </div>
+          <div class="solution">
+            <b>Cultural deep dive</b>
+            <span>Se fizer sentido, explorar códigos jovens, collabs e comunidade.</span>
+          </div>
+          <div class="solution">
+            <b>Retail experience</b>
+            <span>Outra entrada possível: experiência de loja e papéis de compra.</span>
+          </div>
+        </div>
+      </div>
+      <aside class="principle-panel">
+        <h2 class="panel-title">Apostas para discutir</h2>
+        <div class="principle">
+          <span class="spark"></span>
+          <div>
+            <span class="label">Heineken - Guga</span>
+            <span class="title">Baixo teor, ocasião e marca</span>
+          </div>
+        </div>
+        <div class="principle">
+          <span class="spark"></span>
+          <div>
+            <span class="label">JOVI - Marcel</span>
+            <span class="title">Marca nova tentando ganhar espaço</span>
+          </div>
+        </div>
+        <div class="principle current">
+          <span class="spark"></span>
+          <div>
+            <span class="label">Crocs - contato a mapear</span>
+            <span class="title">Expansão, varejo e cultura</span>
+            <span class="meta">É a aposta menos madura, mas pode virar algo se a introdução interna for viável.</span>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="slide light">
+    <div class="topbar">
+      <span class="section"><span class="mark"></span>Próximos passos</span>
+      <span>07 / 07</span>
+    </div>
+    <div class="stage wide-left">
+      <div>
+        <span class="kicker">Como eu puxaria o assunto</span>
+        <p class="quote">Primeiro toque leve: abrir conversa, <strong>ouvir o momento</strong> e só depois entender se faz sentido avançar.</p>
+        <p class="support">A ideia não é chegar com proposta fechada. É usar a abertura para entender prioridades, ver quem deveria participar e sentir se existe uma pauta real para Quali.</p>
+      </div>
+      <div class="activation">
+        <article class="activation-card">
+          <h3>Guga - Heineken</h3>
+          <span class="channel" style="color:var(--green)">LinkedIn</span>
+          <p>Reaquecer a relação construída em pesquisa e propor uma chamada curta para entender o momento da Heineken.</p>
+          <span class="next">Puxar por: parceria anterior + lançamento Heineken Ultimate.</span>
+        </article>
+        <article class="activation-card">
+          <h3>Marcel - JOVI</h3>
+          <span class="channel" style="color:var(--jovi)">LinkedIn / café</span>
+          <p>Retomar contato sem pauta fechada, conectando a chegada na equipe quali da Kantar ao momento de construção da JOVI.</p>
+          <span class="next">Puxar por: construção de marca + aproximação recente com Kantar.</span>
+        </article>
+        <article class="activation-card">
+          <h3>Crocs Brasil</h3>
+          <span class="channel" style="color:#5f8f15">Introdução indireta</span>
+          <p>Acionar o intermediário da franquia em Londrina, mapear o decisor interno e pedir uma apresentação formal.</p>
+          <span class="next">Puxar por: expansão de varejo + cultura de collabs.</span>
+        </article>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<nav class="nav" aria-label="Navegação da apresentação">
+  <div class="dots" id="dots"></div>
+  <div class="pager" id="pager">01 / 07</div>
+  <div class="arrows">
+    <button id="prev" aria-label="Slide anterior">&#8249;</button>
+    <button id="next" aria-label="Próximo slide">&#8250;</button>
+  </div>
+</nav>
+
+<script>
+  const slides=[...document.querySelectorAll(".slide")];
+  const dotsBox=document.getElementById("dots");
+  const pager=document.getElementById("pager");
+  const progress=document.getElementById("progress");
+  let current=0;
+
+  slides.forEach((_,index)=>{
+    const dot=document.createElement("button");
+    dot.className="dot";
+    dot.type="button";
+    dot.setAttribute("aria-label",`Ir para o slide ${index+1}`);
+    dot.addEventListener("click",()=>go(index));
+    dotsBox.appendChild(dot);
+  });
+
+  const dots=[...dotsBox.children];
+
+  function go(index){
+    current=Math.max(0,Math.min(slides.length-1,index));
+    slides.forEach((slide,slideIndex)=>slide.classList.toggle("active",slideIndex===current));
+    dots.forEach((dot,dotIndex)=>dot.classList.toggle("on",dotIndex===current));
+    document.body.classList.toggle("light-nav",slides[current].classList.contains("light"));
+    pager.textContent=`${String(current+1).padStart(2,"0")} / ${String(slides.length).padStart(2,"0")}`;
+    progress.style.width=`${((current+1)/slides.length)*100}%`;
+  }
+
+  document.getElementById("next").addEventListener("click",()=>go(current+1));
+  document.getElementById("prev").addEventListener("click",()=>go(current-1));
+
+  document.addEventListener("keydown",event=>{
+    if(event.key==="ArrowRight" || event.key===" " || event.key==="PageDown") go(current+1);
+    if(event.key==="ArrowLeft" || event.key==="PageUp") go(current-1);
+    if(event.key==="Home") go(0);
+    if(event.key==="End") go(slides.length-1);
+  });
+
+  let touchStart=null;
+  document.addEventListener("touchstart",event=>{
+    touchStart=event.touches[0].clientX;
+  },{passive:true});
+
+  document.addEventListener("touchend",event=>{
+    if(touchStart===null) return;
+    const delta=event.changedTouches[0].clientX-touchStart;
+    if(Math.abs(delta)>52) go(delta<0 ? current+1 : current-1);
+    touchStart=null;
+  },{passive:true});
+
+  const requestedSlide=Number.parseInt(new URLSearchParams(window.location.search).get("slide"),10);
+  go(Number.isFinite(requestedSlide) ? requestedSlide-1 : 0);
+</script>
+</body>
+</html>
